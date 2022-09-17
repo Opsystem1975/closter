@@ -55,23 +55,3 @@ echo "deb http://packages.azlux.fr/debian/ buster main" | sudo tee /etc/apt/sour
 wget -qO - https://azlux.fr/repo.gpg.key | sudo apt-key add -
 sudo apt update
 sudo apt install docker-ctop
-
-sudo mkdir -p /volumes/www/
-sudo mkdir -p /volumes/nginx/certs
-sudo mkdir -p /volumes/nginx/vhostd
-sudo mkdir -p /volumes/nginx/config
-sudo mkdir -p /volumes/nginx/html
-cd /volumes/www/
-
-sudo git clone https://github.com/bedimcode/responsive-halloween-website.git
-sudo git clone https://github.com/StartBootstrap/startbootstrap-sb-admin-2.git
-sudo git clone https://github.com/microsoft/project-html-website.git
-
-sudo mv responsive-halloween-website portal
-sudo mv startbootstrap-sb-admin-2 erp
-sudo mv project-html-website factura
-
-cd /volumes
-sudo git clone https://github.com/Opsystem1975/deploy.git
-
-docker-compose -f deploy/docker-compose.yml up -d

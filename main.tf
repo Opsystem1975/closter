@@ -4,19 +4,20 @@ provider "aws" {
   region     = "us-west-1"
 }
 
-resource "aws_instance" "Reverse-Proxy" {
+resource "aws_instance" "Docker-swarm" {
   instance_type          = "t2.micro"
+  count                  = 3
   ami                    = "ami-085284d24fe829cd0"
   key_name               = "MRIS"
   tags = {
-    Name = "OPSYSTEM"
+    "Name" = "OPSYSTEM-${count.index}"
   }
-  vpc_security_group_ids = [aws_security_group.WebSG.id]
+  vpc_security_group_ids = [aws_security_group.DockerWebSG.id]
   user_data              = filebase64("${path.module}/scripts/docker.sh")
 }
 
-resource "aws_security_group" "WebSG" {
-  name = "sg_reglas_firewall"
+resource "aws_security_group" "DockerWebSG" {
+  name = "sg_reglas_firewall_docker_swarm"
   ingress {
     cidr_blocks = ["0.0.0.0/0"]
     description = "SG HTTPS"
@@ -49,5 +50,5 @@ resource "aws_security_group" "WebSG" {
 }
 
 output "public_ip" {
-  value = "${join(",", aws_instance.Reverse-Proxy.*.public_ip)}"
+  value = "${join(",", aws_instance.Docker-swarm.*.public_ip)}"
 }
